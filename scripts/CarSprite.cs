@@ -14,34 +14,15 @@ public partial class CarSprite : AnimatedSprite2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Vector2 velocity = new Vector2(); // Vector to store the movement direction
+		Vector2 target = GetGlobalMousePosition(); // Get the mouse position in the game world
+        Vector2 direction = (target - GlobalPosition).Normalized(); // Calculate the direction to the mouse cursor
 
-        // Check for input and adjust the velocity accordingly
-        if (Input.IsActionPressed("ui_right")) // For the right arrow key
-        {
-            velocity.X += 1;
-        }
-        if (Input.IsActionPressed("ui_left")) // For the left arrow key
-        {
-            velocity.X -= 1;
-        }
-        if (Input.IsActionPressed("ui_down")) // For the down arrow key
-        {
-            velocity.Y += 1;
-        }
-        if (Input.IsActionPressed("ui_up")) // For the up arrow key
-        {
-            velocity.Y -= 1;
-        }
+        // Rotate the sprite to face towards the mouse cursor
+        float angle = direction.Angle(); // Get the angle in radians towards the mouse cursor
+        Rotation = angle; // Set the sprite's rotation
 
-        // Normalize velocity to ensure consistent movement in all directions
-        velocity = velocity.Normalized() * speed;
-
-        // Move the sprite
-        Position += velocity * (float) delta;
-
-        // Optional: Change animation based on direction
-        //CarSprite sprite = GetNode<CarSprite>("CarSprite"); // Adjust the path if necessary
+        // Move the sprite towards the mouse cursor
+        Position += direction * speed * (float)delta;
 	}
 	
 }
