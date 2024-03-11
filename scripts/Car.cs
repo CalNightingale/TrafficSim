@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class CarSprite : AnimatedSprite2D
+public partial class Car : AnimatedSprite2D
 {
 	[Export]
 	private int speed = 100; // Speed at which the player moves

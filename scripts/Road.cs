@@ -15,6 +15,17 @@ public partial class Road : Node2D
     [Export]
     public Color RoadColor = new Color(0.2f, 0.2f, 0.2f);
 
+    private struct Lane {
+        public Lane(double direction)
+        {
+            Direction = direction;
+        }
+
+        public double Direction { get; }
+
+        public override string ToString() => $"Lane in direction {Direction}";
+    }
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {

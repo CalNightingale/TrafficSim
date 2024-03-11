@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://dqpdxvxyfg7ub"]
 
-[ext_resource type="Texture2D" uid="uid://k5atndhaxudm" path="res://assets/car.png" id="1_fm250"]
-[ext_resource type="Script" path="res://scripts/CarSprite.cs" id="2_43lor"]
+[ext_resource type="Texture2D" uid="uid://k5atndhaxudm" path="res://assets/car.png" id="1_rsgt3"]
+[ext_resource type="Script" path="res://scripts/Car.cs" id="2_wicr2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ge00e"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_fm250")
+"texture": ExtResource("1_rsgt3")
 }],
 "loop": true,
 "name": &"drive",
@@ -15,16 +15,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_fm250")
+"texture": ExtResource("1_rsgt3")
 }],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
 }]
 
-[node name="CarSprite" type="AnimatedSprite2D"]
+[node name="Car" type="AnimatedSprite2D"]
 position = Vector2(260, 225)
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_ge00e")
 animation = &"idle"
-script = ExtResource("2_43lor")
+script = ExtResource("2_wicr2")
