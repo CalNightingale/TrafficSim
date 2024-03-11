@@ -23,6 +23,8 @@ animations = [{
 }]
 
 [node name="CarSprite" type="AnimatedSprite2D"]
+position = Vector2(260, 225)
+scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_ge00e")
 animation = &"idle"
 script = ExtResource("2_43lor")
