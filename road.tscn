@@ -5,5 +5,5 @@
 [node name="Road" type="Node2D"]
 script = ExtResource("1_m6f56")
 NumLanes = 4
-StartPoint = Vector2(2.08165e-12, 500)
-EndPoint = Vector2(1920, 500)
+StartPoint = Vector2(2.08165e-12, 400)
+EndPoint = Vector2(1920, 400)
