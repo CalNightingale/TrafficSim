@@ -24,8 +24,9 @@ animations = [{
 
 [node name="Car" type="AnimatedSprite2D"]
 position = Vector2(260, 225)
+rotation = 3.0
 scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_ge00e")
 animation = &"idle"
 script = ExtResource("2_wicr2")
-MovementAngle = 1.4
+MovementAngle = 3.0

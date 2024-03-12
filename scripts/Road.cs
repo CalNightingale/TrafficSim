@@ -37,6 +37,7 @@ public partial class Road : Node2D
     private struct Lane {
         public Lane(int laneNum, bool direction)
         {
+            GD.Print("spawining a lane");
             LaneNum = laneNum;
             Direction = direction;
             Cars = new List<Car>();
@@ -68,6 +69,7 @@ public partial class Road : Node2D
 
     private void SpawnCar(Lane lane)
     {
+        //GD.PushWarning("spawing a car in lane " + lane.LaneNum);
         Car carInstance = (Car) carScene.Instantiate();
         AddChild(carInstance); // Add the car instance to the Road node for it to be rendered and processed.
             
@@ -75,6 +77,9 @@ public partial class Road : Node2D
         float yPos = StartPoint.Y + (lane.LaneNum + 1) * LaneWidth - (LaneWidth / 2);
         Vector2 carPosition = new Vector2(StartPoint.X, yPos);
         carInstance.GlobalPosition = carPosition;
+        // Calculate car direction (based on lane direction)
+        float carMovementAngle =  lane.Direction ? 0 : (float)Math.PI;
+        carInstance.SetMovementAngle(carMovementAngle);
 
         lane.Cars.Add(carInstance);
 
@@ -83,7 +88,6 @@ public partial class Road : Node2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        InitializeLanes(); // Ensure lanes are initialized upon instantiation
     }
 
     public override void _Draw()
