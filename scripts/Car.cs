@@ -20,7 +20,6 @@ public partial class Car : AnimatedSprite2D
 	// Method to change movement angle and update rotation accordingly
     public void SetMovementAngle(float angle)
     {
-		GD.Print("setting movement angle");
         _movementAngle = angle;
         Rotation = angle;
     }
