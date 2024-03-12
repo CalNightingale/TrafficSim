@@ -1,28 +1,44 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class Car : AnimatedSprite2D
 {
 	[Export]
-	private int speed = 100; // Speed at which the player moves
+	private int speed = 100; // car speed (pixels/sec)
+	private float _movementAngle = 0; // angle at which car moves (radians)
+	[Export]
+	public float MovementAngle
+    {
+        get => _movementAngle;
+        set
+        {
+			SetMovementAngle(value);
+        }
+    }
+
+	// Method to change movement angle and update rotation accordingly
+    public void SetMovementAngle(float angle)
+    {
+		GD.Print("setting movement angle");
+        _movementAngle = angle;
+        Rotation = angle;
+    }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		SetMovementAngle(_movementAngle);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Vector2 target = GetGlobalMousePosition(); // Get the mouse position in the game world
-        Vector2 direction = (target - GlobalPosition).Normalized(); // Calculate the direction to the mouse cursor
+		// Calculate the direction vector based on the angle
+    	Vector2 direction = new Vector2((float)Math.Cos(_movementAngle), (float)Math.Sin(_movementAngle));
 
-        // Rotate the sprite to face towards the mouse cursor
-        float angle = direction.Angle(); // Get the angle in radians towards the mouse cursor
-        Rotation = angle; // Set the sprite's rotation
-
-        // Move the sprite towards the mouse cursor
-        Position += direction * speed * (float)delta;
+    	// Move the car in the direction of movementAngle by speed * delta
+    	Position += direction * speed * (float)delta;
 	}
 	
 }
