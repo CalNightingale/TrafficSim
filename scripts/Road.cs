@@ -1,34 +1,89 @@
 using Godot;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 [Tool] // This enables the script to run in the editor
 public partial class Road : Node2D
 {
+    private int _numLanes = 2;
     [Export]
-    public int NumLanes = 2; // Number of lanes, with 2 as default
+    public int NumLanes
+    {
+        get => _numLanes;
+        set
+        {
+            if (_numLanes != value)
+            {
+                _numLanes = value;
+                InitializeLanes(); // Initialize or reinitialize lanes when NumLanes changes
+                QueueRedraw(); // And we likely need to redraw
+            }
+        }
+    }
+
     [Export]
     public float LaneWidth = 50.0f; // The width of each lane
     [Export]
-    public Vector2 StartPoint = new Vector2(100, 100); // Starting point of the road
+    public Vector2 StartPoint = new Vector2(0, 400); // Starting point of the road
     [Export]
-    public Vector2 EndPoint = new Vector2(400, 100); // Ending point of the road, defaulting to a straight line
+    public Vector2 EndPoint = new Vector2(1920, 400); // Ending point of the road, defaulting to a straight line
     [Export]
     public Color RoadColor = new Color(0.2f, 0.2f, 0.2f);
+    private List<Lane> lanes = new List<Lane>();
+    private PackedScene carScene = GD.Load<PackedScene>("res://car.tscn");
+
 
     private struct Lane {
-        public Lane(double direction)
+        public Lane(int laneNum, bool direction)
         {
+            LaneNum = laneNum;
             Direction = direction;
+            Cars = new List<Car>();
         }
 
-        public double Direction { get; }
+        public int LaneNum { get; }
+
+        public bool Direction { get; } // true if start->end, false otherwise
+
+        public List<Car> Cars { get; set; }
 
         public override string ToString() => $"Lane in direction {Direction}";
+    }
+
+    // Call this method to initialize lanes based on the current NumLanes value
+    private void InitializeLanes()
+    {
+        lanes.Clear();
+        float laneOffsetY = 0f;
+
+        for (int i = 0; i < NumLanes; i++)
+        {
+            bool dir = i <= NumLanes / 2;
+            var lane = new Lane(i, dir);
+            lanes.Add(lane);
+            if (!Engine.IsEditorHint()) SpawnCar(lane);
+        }
+    }
+
+    private void SpawnCar(Lane lane)
+    {
+        Car carInstance = (Car) carScene.Instantiate();
+        AddChild(carInstance); // Add the car instance to the Road node for it to be rendered and processed.
+            
+        // Calculate the car's initial position. Adjust the laneOffsetY as per your requirement.
+        float yPos = StartPoint.Y + (lane.LaneNum + 1) * LaneWidth - (LaneWidth / 2);
+        Vector2 carPosition = new Vector2(StartPoint.X, yPos);
+        carInstance.GlobalPosition = carPosition;
+
+        lane.Cars.Add(carInstance);
+
     }
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        InitializeLanes(); // Ensure lanes are initialized upon instantiation
     }
 
     public override void _Draw()
@@ -44,9 +99,9 @@ public partial class Road : Node2D
         DrawRect(new Rect2(StartPoint - roadPerpendicular, EndPoint - StartPoint + roadPerpendicular * 2), RoadColor);
 
         // Draw lanes
-        for (int i = 1; i < NumLanes; i++)
+        foreach (Lane lane in lanes)
         {
-            Vector2 laneOffset = roadPerpendicular * (2 * i / (float)NumLanes - 1);
+            Vector2 laneOffset = roadPerpendicular * (2 * (lane.LaneNum+1) / (float)NumLanes - 1);
             DrawLine(StartPoint + laneOffset, EndPoint + laneOffset, new Color(1, 1, 1));
         }
     }
